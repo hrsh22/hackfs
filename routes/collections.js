@@ -5,6 +5,8 @@ const {
   deployCollection,
 } = require("../blockchain/functions/deployCollection");
 
+const { setupLaunch } = require("../blockchain/functions/setupLaunch");
+
 router.get("/", (req, res) => {
   res.send("We are on collections");
 });
@@ -21,6 +23,32 @@ router.post("/deploy", async (req, res) => {
       ownerAddress
     );
     res.status(200).json({ collectionDetails });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//POST
+router.post("/setupLaunch", async (req, res) => {
+  const {
+    contractAddress,
+    publicMintPrice_,
+    presaleMintPrice_,
+    presaleStartTime_,
+    publicSaleStartTime_,
+    presaleWhitelistMerkelTreeRoot_,
+  } = req.body;
+  try {
+    const launchDetails = await setupLaunch(
+      contractAddress,
+      publicMintPrice_,
+      presaleMintPrice_,
+      presaleStartTime_,
+      publicSaleStartTime_,
+      presaleWhitelistMerkelTreeRoot_
+    );
+    res.status(200).json({ launchDetails });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
