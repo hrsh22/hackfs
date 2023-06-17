@@ -2,6 +2,7 @@ const { ethers } = require("ethers");
 const solc = require("solc");
 const path = require("path");
 const fs = require("fs");
+const { deployCollectionNotification } = require("../notifications/pushprotocol")
 require("dotenv").config();
 
 // const NFTcollectionDetails = require("../model/NFTcollectionDetails");
@@ -87,6 +88,18 @@ const deployCollection = async (
     // Get the transaction hash
     const txHash = deployedContract.deployTransaction.hash;
     console.log("Transaction Hash:", txHash);
+
+
+     // ------------ PUSH NOTIFICATION ------------ //
+
+  await deployCollectionNotification(
+    name,
+    symbol,
+    maxSupply,
+    teamReserve,
+    ownerAddress,
+    txHash
+  );
 
     // // ----------------MongoDB----------------------------//
     // // var tokenHash = ethers.utils.id(contractAddress + tokenId);

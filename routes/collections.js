@@ -15,14 +15,14 @@ router.get("/", (req, res) => {
 router.post("/deploy", async (req, res) => {
   const { name, symbol, maxSupply, teamReserve, ownerAddress } = req.body;
   try {
-    const collectionDetails = await deployCollection(
+    const collectionAddress = await deployCollection(
       name,
       symbol,
       maxSupply,
       teamReserve,
       ownerAddress
     );
-    res.status(200).json({ collectionDetails });
+    res.status(200).json({ collectionAddress });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
