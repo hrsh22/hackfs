@@ -6,6 +6,8 @@ const {
 } = require("../blockchain/functions/deployCollection");
 
 const { setupLaunch } = require("../blockchain/functions/setupLaunch");
+const { presaleMint } = require("../blockchain/functions/presaleMint");
+const { publicMint } = require("../blockchain/functions/publicMint");
 
 router.get("/", (req, res) => {
   res.send("We are on collections");
@@ -37,7 +39,6 @@ router.post("/setupLaunch", async (req, res) => {
     presaleMintPrice_,
     presaleStartTime_,
     publicSaleStartTime_,
-    presaleWhitelistMerkelTreeRoot_,
   } = req.body;
   try {
     const launchDetails = await setupLaunch(
@@ -46,7 +47,7 @@ router.post("/setupLaunch", async (req, res) => {
       presaleMintPrice_,
       presaleStartTime_,
       publicSaleStartTime_,
-      presaleWhitelistMerkelTreeRoot_
+
     );
     res.status(200).json({ launchDetails });
   } catch (err) {
@@ -55,37 +56,37 @@ router.post("/setupLaunch", async (req, res) => {
   }
 });
 
-// get collection details
-// router.get("/collectionDetails", async (req, res) => {
-//   const { contractAddress, name, symbol, sort, select} =
-//     req.query;
-//   const queryObject = {};
+//POST
+router.post("/presalemint", async (req, res) => {
+  const {
+    contractAddress, presaleMintPrice
+  } = req.body;
+  try {
+    const presaleMintTx = await presaleMint(
+      contractAddress, presaleMintPrice
+    );
+    res.status(200).json({ presaleMintTx });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
-//   if (contractAddress) {
-//     queryObject.contractAddress = new RegExp(`^${contractAddress}$`, "i");
-//   }
-//   if (name) {
-//     queryObject.name = new RegExp(`^${name}$`, "i");
-//   }
-//   if (symbol) {
-//     queryObject.symbol = new RegExp(`^${symbol}$`, "i");
-//   }
+//POST
+router.post("/publicsalemint", async (req, res) => {
+  const {
+    contractAddress, publicsaleMintPrice
+  } = req.body;
+  try {
+    const publicsaleMintTx = await publicMint(
+      contractAddress, publicsaleMintPrice
+    );
+    res.status(200).json({ publicsaleMintTx });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
-//   let apiData = NFTcollectionDetails.find(queryObject);
-
-//   if (sort) {
-//     apiData = apiData.sort(sort.replace(/,/g, ' '));
-//   }
-//   if (select) {
-//     apiData = apiData.select(select.replace(/,/g, ' '));
-//   }
-
-//   console.log("NFT Collection - Query called!");
-
-//   const collections = await apiData;
-//   res.status(200).json({ total: collections.length, collections });
-// });
-
-//---------------------------------------------------------//
 
 module.exports = router;

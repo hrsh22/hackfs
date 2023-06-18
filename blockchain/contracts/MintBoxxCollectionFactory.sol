@@ -1,9 +1,8 @@
-// SPDX-License-Identifier: GPL-3.0
 // File: https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/interfaces/IERC2309.sol
 
 // OpenZeppelin Contracts (last updated v4.8.0) (interfaces/IERC2309.sol)
 
-pragma solidity >=0.6.0 <0.9.0;
+pragma solidity ^0.8.19;
 
 /**
  * @dev ERC-2309: ERC-721 Consecutive Transfer Extension.
@@ -3525,7 +3524,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     }
 }
 
-// File: contracts/MintBoxxCollectionFactory.sol
+// File: New contracts/MintBoxxCollectionFactory.sol
 
 pragma solidity >=0.6.0 <0.9.0;
 
@@ -3552,7 +3551,6 @@ contract MintBoxx is ERC721, Ownable, IERC2309 {
     uint256 presaleMintPrice;
     uint256 presaleStartTime;
     address ownerAddress;
-    bytes32 presaleWhitelistMerkelTreeRoot;
 
     constructor(
         string memory name_,
@@ -3724,30 +3722,21 @@ contract MintBoxx is ERC721, Ownable, IERC2309 {
         uint256 publicMintPrice_,
         uint256 presaleMintPrice_,
         uint256 presaleStartTime_,
-        uint256 publicSaleStartTime_,
-        bytes32 presaleWhitelistMerkelTreeRoot_
+        uint256 publicSaleStartTime_
     ) public onlyOwner {
         publicMintPrice = publicMintPrice_;
         presaleMintPrice = presaleMintPrice_;
         presaleStartTime = presaleStartTime_;
         publicSaleStartTime = publicSaleStartTime_;
-        presaleWhitelistMerkelTreeRoot = presaleWhitelistMerkelTreeRoot_;
     }
 
     function toBytes32(address addr) internal pure returns (bytes32) {
         return bytes32(uint256(uint160(addr)));
     }
 
-    function presaleMint(bytes32[] calldata whitelistProof) public payable {
+    function presaleMint() public payable {
         require(block.timestamp > presaleStartTime, "Presale is yet to begin");
-        require(
-            MerkleProof.verify(
-                whitelistProof,
-                presaleWhitelistMerkelTreeRoot,
-                toBytes32(msg.sender)
-            ) == true,
-            "invalid merkle proof"
-        );
+
         require(presaleMintPrice == msg.value, "Invalid Presale Mint Price");
         uint256 tokenId = _tokenIds + 1;
         _safeMint(msg.sender, tokenId);

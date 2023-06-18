@@ -281,13 +281,7 @@ const MintBoxxCollectionFactoryABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "bytes32[]",
-				"name": "whitelistProof",
-				"type": "bytes32[]"
-			}
-		],
+		"inputs": [],
 		"name": "presaleMint",
 		"outputs": [],
 		"stateMutability": "payable",
@@ -410,11 +404,6 @@ const MintBoxxCollectionFactoryABI = [
 				"internalType": "uint256",
 				"name": "publicSaleStartTime_",
 				"type": "uint256"
-			},
-			{
-				"internalType": "bytes32",
-				"name": "presaleWhitelistMerkelTreeRoot_",
-				"type": "bytes32"
 			}
 		],
 		"name": "setUpLaunch",

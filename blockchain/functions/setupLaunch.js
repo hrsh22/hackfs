@@ -11,7 +11,6 @@ const setupLaunch = async (
   presaleMintPrice_,
   presaleStartTime_,
   publicSaleStartTime_,
-  presaleWhitelistMerkelTreeRoot_
 ) => {
   try {
     const contract = new ethers.Contract(
@@ -19,15 +18,12 @@ const setupLaunch = async (
       MintBoxxCollectionFactoryABI,
       signer
     );
-    //     console.log("Contract Address: ", contractAddress);
-    // console.log("Contract: ",contract);
 
     const transaction = await contract.setUpLaunch(
       publicMintPrice_,
       presaleMintPrice_,
       presaleStartTime_,
       publicSaleStartTime_,
-      presaleWhitelistMerkelTreeRoot_
     );
     const txHash = transaction.hash;
     console.log("transaction Hash:", txHash); // log the transaction hash for debugging purposes
@@ -39,7 +35,6 @@ const setupLaunch = async (
       presaleStartTime: presaleStartTime_,
       publicMintPrice: publicMintPrice_,
       publicSaleStartTime: publicSaleStartTime_,
-      presaleWhitelistMerkelTreeRoot: presaleWhitelistMerkelTreeRoot_,
     };
   } catch (err) {
     console.error(err);
